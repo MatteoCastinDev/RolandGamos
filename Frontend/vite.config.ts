@@ -7,4 +7,10 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     react()],
+  server: {
+    allowedHosts: [
+      "wad-regulator-suffix.ngrok-free.dev"
+    ]
+  }
+
 })

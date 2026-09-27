@@ -12,7 +12,7 @@ function BubbleChat({ player, message }: ChatMessage) {
               {/* Card */}
               <div className="bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-2xl p-4 space-y-3">
                 <h2 className="font-medium text-gray-800 dark:text-neutral-200">
-                  ${message}
+                  {message}
                 </h2>
               </div>
               {/* End Card */}
@@ -28,7 +28,9 @@ function BubbleChat({ player, message }: ChatMessage) {
               <div className="inline-flex flex-col justify-end">
                 {/* Card */}
                 <div className="inline-block bg-blue-600 dark:bg-blue-500 rounded-2xl p-4 shadow-2xs">
-                  <p className="text-sm text-white">what's preline ui?</p>
+                  <h2 className="text-sm text-white">
+                    {message}
+                  </h2>
                 </div>
                 {/* End Card */}
               </div>
