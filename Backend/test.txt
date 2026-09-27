@@ -1,0 +1,1 @@
+https://musicbrainz.org/ws/2/recording?query=artist:SCH%20AND%20artiste:Damso&fmt=json&limit=1

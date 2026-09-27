@@ -1,0 +1,9 @@
+$kind: http-request
+description: ""
+url: https://musicbrainz.org/ws/2/recording?query=artist:SCH%20AND%20artiste:Damso&fmt=json&limit=1
+method: GET
+queryParams:
+  query: artist:SCH%20AND%20artiste:Damso
+  fmt: json
+  limit: "1"
+order: 1790524257226

@@ -1,0 +1,7 @@
+$kind: http-request
+description: ""
+url: http://localhost:3000/api/artists/search?name=Nayte
+method: GET
+queryParams:
+  name: Nayte
+order: 567898451087661

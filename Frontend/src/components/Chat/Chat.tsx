@@ -12,7 +12,6 @@ function Chat() {
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop = 
       messageContainerRef.current.scrollHeight;
-      console.log("fdfs")
     }
   }, [messages]);
 
@@ -23,7 +22,7 @@ function Chat() {
       className="flex-1 min-h-0 border-5 rounded-md border-black p-4 overflow-y-auto">
         <ul className="space-y-5">
           {messages.map((message) => (
-            <BubbleChat player={message.player} message={message.message} />
+            <BubbleChat id={message.id} player={message.player} message={message.message} />
           ))}
         </ul>
       </div>

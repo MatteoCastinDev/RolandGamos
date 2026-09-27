@@ -1,0 +1,14 @@
+$kind: http-request
+description: ""
+url: http://localhost:3000/api/artists/checkFeat?nameA=Kaaris&nameB=Damso
+method: GET
+queryParams:
+  - key: nameA
+    value: Kaaris
+    disabled: false
+    description: ""
+  - key: nameB
+    value: Damso
+    disabled: false
+    description: ""
+order: 637933198769031
