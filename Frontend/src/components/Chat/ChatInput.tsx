@@ -11,6 +11,7 @@ function ChatInput() {
   const setGame = useGameStore((state)=> state.setGame)
   const messageStore = useChatStore((state) => state.messages);
   const gameIdStore = useGameStore((state)=>state.gameId)
+  const gameCurrentPlayer = useGameStore((state)=>state.currentArtist)
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -26,6 +27,7 @@ function ChatInput() {
       const data = await response.json();
       console.log(data);
       if (!data) {        
+        setMessage("");
         return;
       }
         console.log(data);
@@ -34,17 +36,16 @@ function ChatInput() {
         const gameResponse = await fetch(`http://localhost:3000/api/game/start?firstArtist=${encodeURIComponent(message)}`)
         const game: Game = await gameResponse.json();
         setGame(game.gameId, game.currentArtist, game.currentPlayer);
-        addMessage(true, message);
+        addMessage(game.currentPlayer, message);
       } else {
         const gameResponse = await fetch(`http://localhost:3000/api/game/play?gameId=${encodeURIComponent(gameIdStore ?? 0)}&newArtist=${encodeURIComponent(message)}`)
-        const tryResult = await gameResponse.json();
+        const tryResult : Game = await gameResponse.json();
         if(!tryResult)
-          addMessage(false, "Perdu !");
+          addMessage(gameCurrentPlayer ?? "player1", "Perdu !");
         else {
-          addMessage(true, message);
+          addMessage(tryResult.currentPlayer, message);
         }
       }
-      //addMessage(true, message);
       setMessage("");
     }
     finally {

@@ -3,7 +3,7 @@ import type { ChatMessage } from "../types/ChatTypes"
 
 type ChatStore = {
     messages: ChatMessage[];
-    addMessage: (player: boolean, message: string) => void;
+    addMessage: (player: string, message: string) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({

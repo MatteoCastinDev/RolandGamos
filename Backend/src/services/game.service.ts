@@ -17,7 +17,7 @@ export async function validateArtist(game:Game, newArtist: string){
   if (!hasFeaturing || hasFeaturing.count == 0) {
     return false;
   }
-
+  game.currentPlayer = game.currentPlayer === "player1" ? "player2" : "player1";
   return game;
 }
 

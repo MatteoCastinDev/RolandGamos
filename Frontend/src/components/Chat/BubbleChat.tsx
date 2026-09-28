@@ -4,7 +4,7 @@ import type { ChatMessage } from "../../types/ChatTypes";
 function BubbleChat({ player, message }: ChatMessage) {
   return (
     <div>
-      {player ? (
+      {player === "player1"? (
         <div>
           {/* Chat */}
           <li className="max-w-lg flex gap-x-2 sm:gap-x-4 me-11">
