@@ -9,6 +9,8 @@ export function createGame() {
     currentPlayer: "player1",
     gameId: id,
     currentArtist: null,
+    artistList: [],
+    loosingReason: "not defined",
     winner: null,
     status: "playing"
   };

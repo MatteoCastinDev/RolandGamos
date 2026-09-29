@@ -7,7 +7,9 @@ export type Game = {
 
   currentArtist: string | null;
   currentPlayer: Player;
+  artistList: string[];
 
   status: GameStatus;
   winner: Player | null;
+  loosingReason: string;
 };

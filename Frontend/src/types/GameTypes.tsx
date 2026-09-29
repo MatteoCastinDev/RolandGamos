@@ -9,5 +9,6 @@ export type Game = {
   currentPlayer: Player;
 
   status: GameStatus;
-  winner: Player | null;
+  winner: Player | null;  
+  loosingReason: string;
 };
