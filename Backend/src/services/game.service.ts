@@ -10,13 +10,13 @@ export async function playTurn(gameId: string, proposedArtist: string) {
   if (!game || !game.currentArtist) return false;
 
   const hasFeaturing = await checkFeaturing(proposedArtist, game.currentArtist);
-
+  
+  game.currentPlayer = game.currentPlayer === "player1" ? "player2" : "player1";
   if (!hasFeaturing || hasFeaturing.count == 0) {
     game.status = "finished";
     game.winner = game.currentPlayer;
   } else {
     game.currentArtist = proposedArtist;
-    game.currentPlayer = game.currentPlayer === "player1" ? "player2" : "player1";
   }
   return game;
 }

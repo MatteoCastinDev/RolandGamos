@@ -42,7 +42,7 @@ async function fetchMusicBrainz(url: string) {
     try {
       const response = await fetch(url, {
         headers: {
-          "User-Agent": "RolandGamos/1.0 (contact@example.com)",
+          "User-Agent": "RolandGamos/1.0 (castinmatteopro@gmail.com)",
         },
       });
 

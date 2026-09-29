@@ -4,6 +4,7 @@ import type { ChatMessage } from "../types/ChatTypes"
 type ChatStore = {
     messages: ChatMessage[];
     addMessage: (player: string, message: string) => void;
+    clearChat:() => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -20,4 +21,5 @@ export const useChatStore = create<ChatStore>((set) => ({
                 },
             ],
         })),
+    clearChat: () => set({messages: []})
 }));

@@ -1,3 +1,4 @@
+import { startGame } from "../../services/game.service";
 import { useGameStore } from "../../stores/gameStore";
 import type { Game } from "../../types/GameTypes";
 
@@ -6,11 +7,7 @@ function GameStart() {
 
   const handleStart = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/games/start`);
-      if (!response.ok) {
-        throw new Error(`Erreur serveur : ${response.status}`);
-      }
-      const newGame: Game = await response.json();
+      const newGame: Game = await startGame();
       gameStore.setGame(newGame);
     } catch (error) {
       console.error("Impossible de démarrer la partie :", error);
@@ -22,7 +19,6 @@ function GameStart() {
       <div className="flex flex-col items-center gap-8">
         <div className="text-center">
           <h1 className="text-5xl font-bold">ROLAND GAMOS</h1>
-
           <p className="mt-3 text-gray-500">Le jeu des featurings</p>
         </div>
 

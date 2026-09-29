@@ -1,4 +1,5 @@
 import Chat from "../components/GameBoard/Chat";
+import GameEnding from "../components/GameEnding/GameEnding";
 import GameStart from "../components/GameStart/GameStart";
 import { useGameStore } from "../stores/gameStore";
 
@@ -14,7 +15,7 @@ function GamePage() {
   }
 
   if (status == "finished") {
-    return <div><h2>PuffGoutPaff</h2></div>
+    return <GameEnding/>
   }
 
   return null;

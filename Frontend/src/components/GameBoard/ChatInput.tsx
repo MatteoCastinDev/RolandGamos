@@ -1,7 +1,9 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useChatStore } from "../../stores/chatStore";
 import { useGameStore } from "../../stores/gameStore";
 import type { Game } from "../../types/GameTypes";
+import { checkArtistExist } from "../../services/artiste.service";
+import { submitFirstArtist, submitArtist } from "../../services/game.service";
 
 function ChatInput() {
   const [message, setMessage] = useState("");
@@ -10,6 +12,15 @@ function ChatInput() {
   const addMessage = useChatStore((state) => state.addMessage);
   const game = useGameStore();
   const messageStore = useChatStore((state) => state.messages);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isChecking) {
+      inputRef.current?.focus();
+    }
+  }, [isChecking]);
+
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -18,54 +29,25 @@ function ChatInput() {
     setIsChecking(true);
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/artists/search?name=${encodeURIComponent(message)}`,
-      );
-
-      const data = await response.json();
-      if (!data) {
+      if (!(await checkArtistExist(message))) {
         setMessage("");
         return;
       }
-      if(!game || !game.game)
-        return;
+      if (!game || !game.game) return;
 
       const messageCount = messageStore.length;
       if (messageCount == 0) {
-        const gameResponse = await fetch(
-          `http://localhost:3000/api/games/${game.game.gameId}/firstTurn`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              firstArtist: message,
-            }),
-          },
+        const firstTurnResult = await submitFirstArtist(
+          game.game.gameId,
+          message,
         );
-        const firstTurnResult = await gameResponse.json()
         game.setGame(firstTurnResult);
         addMessage(firstTurnResult.currentPlayer ?? "player1", message);
       } else {
-        const response = await fetch(
-          `http://localhost:3000/api/games/${game.game.gameId}/turn`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              artist: message,
-            }),
-          },
-        );
-        const turnResult: Game = await response.json();
+      
+        const turnResult: Game = await submitArtist(game.game.gameId, message);
         game.setGame(turnResult);
-        if (turnResult.status === "finished")
-          
-          console.log("ef");
-          
+        if (turnResult.status === "finished") console.log("ef");
         else {
           addMessage(turnResult.currentPlayer, message);
         }
@@ -81,6 +63,7 @@ function ChatInput() {
       <div>
         <form className="flex w-full gap-2 p-4" onSubmit={handleSubmit}>
           <input
+            ref={inputRef}
             type="text"
             value={message}
             disabled={isChecking}
@@ -99,7 +82,6 @@ function ChatInput() {
         </form>
       </div>
     </div>
-    
   );
 }
 
