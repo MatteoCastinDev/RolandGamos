@@ -1,34 +1,42 @@
-import { create } from "node:domain";
 import { getGame, createGame } from "../managers/game.manager.js";
-import type { Game } from "../types/game.js";
 import { searchArtist, checkFeaturing } from "./musicbrainz.service.js";
 
-export async function validateArtist(game:Game, newArtist: string){
-  const artistExists = await searchArtist(newArtist);
+export async function playTurn(gameId: string, proposedArtist: string) {
+  const artistExists = await searchArtist(proposedArtist);
 
-  if (!artistExists) {
-    return false;
-  }
-  game.currentArtist = game.proposedArtist;
-  game.proposedArtist = newArtist;
+  if (!artistExists) return false;
+ 
+  const game = getGame(gameId);
+  if (!game || !game.currentArtist) return false;
 
-  const hasFeaturing = await checkFeaturing(game);
-  
+  const hasFeaturing = await checkFeaturing(proposedArtist, game.currentArtist);
+
   if (!hasFeaturing || hasFeaturing.count == 0) {
-    return false;
+    game.status = "finished";
+    game.winner = game.currentPlayer;
+  } else {
+    game.currentArtist = proposedArtist;
+    game.currentPlayer = game.currentPlayer === "player1" ? "player2" : "player1";
   }
-  game.currentPlayer = game.currentPlayer === "player1" ? "player2" : "player1";
   return game;
 }
 
-export async function startGame(firstArtist: string){
-  const artistExists = await searchArtist(firstArtist);
+export async function startGame() {
+  
+  const game = createGame();
 
-  if (!artistExists) {
-    return false;
-  }
-  
-  const game = createGame(firstArtist);
-  
+  return game;
+}
+
+export async function firstTurn(gameId: string, proposedArtist: string) {
+
+  const artistExists = await searchArtist(proposedArtist);
+
+  if (!artistExists) return false;
+ 
+  const game = getGame(gameId);
+  if (!game) return false;
+  game.currentArtist = proposedArtist
+  game.currentPlayer = game.currentPlayer === "player1" ? "player2" : "player1";
   return game;
 }

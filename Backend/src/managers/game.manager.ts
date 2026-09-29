@@ -2,14 +2,15 @@ import type { Game } from "../types/game.js";
 
 const games = new Map<string, Game>();
 
-export function createGame(firstArtist: string) {
+export function createGame() {
   const id = crypto.randomUUID();
 
   const game: Game = {
     currentPlayer: "player1",
     gameId: id,
     currentArtist: null,
-    proposedArtist: firstArtist
+    winner: null,
+    status: "playing"
   };
 
   games.set(id, game);

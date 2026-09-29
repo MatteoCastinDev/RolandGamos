@@ -1,13 +1,12 @@
-import './App.css'
-import Chat from './components/Chat/Chat'
+import "./App.css";
+import GamePage from "./views/GamePage";
 
 function App() {
-  
   return (
-    <div className='h-screen flex justify-center'>
-      <Chat/>
+    <div className="h-screen">
+      <GamePage />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

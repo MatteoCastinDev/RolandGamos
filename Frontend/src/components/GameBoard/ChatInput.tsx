@@ -8,10 +8,8 @@ function ChatInput() {
   const [isChecking, setIsChecking] = useState(false);
 
   const addMessage = useChatStore((state) => state.addMessage);
-  const setGame = useGameStore((state)=> state.setGame)
+  const game = useGameStore();
   const messageStore = useChatStore((state) => state.messages);
-  const gameIdStore = useGameStore((state)=>state.gameId)
-  const gameCurrentPlayer = useGameStore((state)=>state.currentArtist)
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -21,37 +19,61 @@ function ChatInput() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/artists/search?name=${encodeURIComponent(message)}`
+        `http://localhost:3000/api/artists/search?name=${encodeURIComponent(message)}`,
       );
 
       const data = await response.json();
-      console.log(data);
-      if (!data) {        
+      if (!data) {
         setMessage("");
         return;
       }
-        console.log(data);
+      if(!game || !game.game)
+        return;
+
       const messageCount = messageStore.length;
-      if(messageCount == 0){
-        const gameResponse = await fetch(`http://localhost:3000/api/game/start?firstArtist=${encodeURIComponent(message)}`)
-        const game: Game = await gameResponse.json();
-        setGame(game.gameId, game.currentArtist, game.currentPlayer);
-        addMessage(game.currentPlayer, message);
+      if (messageCount == 0) {
+        const gameResponse = await fetch(
+          `http://localhost:3000/api/games/${game.game.gameId}/firstTurn`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              firstArtist: message,
+            }),
+          },
+        );
+        const firstTurnResult = await gameResponse.json()
+        game.setGame(firstTurnResult);
+        addMessage(firstTurnResult.currentPlayer ?? "player1", message);
       } else {
-        const gameResponse = await fetch(`http://localhost:3000/api/game/play?gameId=${encodeURIComponent(gameIdStore ?? 0)}&newArtist=${encodeURIComponent(message)}`)
-        const tryResult : Game = await gameResponse.json();
-        if(!tryResult)
-          addMessage(gameCurrentPlayer ?? "player1", "Perdu !");
+        const response = await fetch(
+          `http://localhost:3000/api/games/${game.game.gameId}/turn`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              artist: message,
+            }),
+          },
+        );
+        const turnResult: Game = await response.json();
+        game.setGame(turnResult);
+        if (turnResult.status === "finished")
+          
+          console.log("ef");
+          
         else {
-          addMessage(tryResult.currentPlayer, message);
+          addMessage(turnResult.currentPlayer, message);
         }
       }
       setMessage("");
-    }
-    finally {
+    } finally {
       setIsChecking(false);
     }
-
   };
 
   return (
@@ -77,6 +99,7 @@ function ChatInput() {
         </form>
       </div>
     </div>
+    
   );
 }
 

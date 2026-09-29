@@ -1,7 +1,5 @@
 import type { FastifyInstance } from "fastify";
 import { checkFeaturing, searchArtist } from "../services/musicbrainz.service.js"
-import { validateArtist } from "../services/game.service.js";
-import { createGame } from "../managers/game.manager.js";
 
 export async function artistsRoutes(app: FastifyInstance) {
   app.get("/api/artists/search", async (request, reply) => {
@@ -30,26 +28,10 @@ export async function artistsRoutes(app: FastifyInstance) {
       });
     }
 
-    const artists = await checkFeaturing({currentPlayer: "player1", gameId:crypto.randomUUID(), currentArtist: nameA, proposedArtist:nameB});
+    const artists = await checkFeaturing(nameA, nameB);
 
     return {
       artists,
     };
   });
-
-  /*app.get("/api/artists/gameTest", async (request, reply) => {
-    const { name } = request.query as { name: string };
-    
-    if (!name) {
-      return reply.status(400).send({
-        error: `Artists names is required`,
-      });
-    }
-    const game = createGame();
-    const result = await validateArtist(game, name);
-
-    return {
-      result,
-    };
-  });*/
 }

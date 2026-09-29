@@ -1,35 +1,18 @@
 import { create } from "zustand";
 
+import type { Game } from "../types/GameTypes";
+
 type GameStore = {
-  gameId: string | null;
-  currentArtist: string | null;
-  currentPlayer: "player1" | "player2" | null;
+  game: Game | null;
 
-  setGame: (
-    gameId: string,
-    currentArtist: string | null,
-    currentPlayer: "player1" | "player2"
-  ) => void;
-
+  setGame: (game: Game) => void;
   clearGame: () => void;
 };
 
 export const useGameStore = create<GameStore>((set) => ({
-  gameId: null,
-  currentArtist: null,
-  currentPlayer: null,
+  game: null,
 
-  setGame: (gameId, currentArtist, currentPlayer) =>
-    set({
-      gameId,
-      currentArtist,
-      currentPlayer,
-    }),
+  setGame: (game) => set({ game }),
 
-  clearGame: () =>
-    set({
-      gameId: null,
-      currentArtist: null,
-      currentPlayer: null,
-    }),
+  clearGame: () => set({ game: null }),
 }));

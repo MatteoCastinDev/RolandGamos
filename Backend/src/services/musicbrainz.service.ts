@@ -17,9 +17,9 @@ export async function searchArtist(name: string) {
   return data.artists;
 }
 
-export async function checkFeaturing(game: Game) {
+export async function checkFeaturing(proposedArtist: string, currentArtist: string) {
   const params = new URLSearchParams({
-    query: `artist:${game.currentArtist} AND artist:${game.proposedArtist}`,
+    query: `artist:${currentArtist} AND artist:${proposedArtist}`,
     fmt: "json",
     limit: "1",
   });
