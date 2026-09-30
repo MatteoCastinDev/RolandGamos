@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { artistsRoutes } from "./routes/artists.routes.js";
 import { gameRoutes } from "./routes/game.routes.js";
+import {healthRoutes} from "./routes/health.routes.js";
 
 const app = Fastify({
   logger: true,
@@ -17,7 +18,9 @@ app.get("/", async () => {
   };
 });
 
-await app.register(artistsRoutes, gameRoutes);
+await app.register(artistsRoutes);
+await app.register(gameRoutes);
+await app.register(healthRoutes);
 
 app.listen({ port: 3000 }, (error, address) => {
   if (error) {

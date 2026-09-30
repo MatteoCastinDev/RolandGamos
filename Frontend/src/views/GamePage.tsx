@@ -5,7 +5,6 @@ import { useGameStore } from "../stores/gameStore";
 
 function GamePage() {
   const status = useGameStore((state) => state.game?.status);
-
     if (!status) {
     return <GameStart />;
   }

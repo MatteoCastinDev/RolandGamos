@@ -3,9 +3,11 @@ import { useGameStore } from "../../stores/gameStore";
 import type { Game } from "../../types/GameTypes";
 import logo from "../../assets/logo.png";
 import tinyLogo from "../../assets/logo_page.png";
+import {useHealthStore} from "../../stores/healthStore.ts";
 
 function GameStart() {
   const setGame = useGameStore((state) => state.setGame);
+  const isOnline = useHealthStore((state) => state.isOnline);
 
   const handleStart = async () => {
     try {
@@ -75,13 +77,21 @@ function GameStart() {
               actuel. Trouve la bonne connexion et fais durer la partie.
             </p>
 
-            <button
+            {isOnline ? <button
                 type="button"
                 onClick={handleStart}
                 className="mt-10 rounded-xl bg-blue-600 px-10 py-3.5 font-medium text-white shadow-lg shadow-blue-600/10 transition hover:bg-blue-500 active:scale-[0.98]"
             >
               Commencer la partie
-            </button>
+            </button> :
+                <button
+                    type="button"
+                    onClick={handleStart}
+                    className="mt-10 rounded-xl bg-blue-600 px-10 py-3.5 font-medium text-white shadow-lg shadow-blue-600/10 transition hover:bg-blue-500 active:scale-[0.98]"
+                >
+                  Serveur Indisponible
+                </button>
+            }
 
             <p className="mt-4 text-xs text-gray-700">
               Bonne chance 🎵

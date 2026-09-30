@@ -1,8 +1,11 @@
 import "./App.css";
 import GamePage from "./views/GamePage";
+import {useApiStatus} from "./hooks/useApiStatus.ts";
 
 function App() {
-  return (
+    useApiStatus();
+
+    return (
     <div className="h-screen">
       <GamePage />
     </div>
